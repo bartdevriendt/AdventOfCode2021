@@ -6,6 +6,9 @@ namespace AdventOfCode2021
     public class ExcerciseBase
     {
 
+        public int Day { get; set; }
+        public int Part { get; set; }
+        
         protected void ReadFileLineByLine(string file, Action<string> action)
         {
 

@@ -6,6 +6,12 @@ namespace AdventOfCode2021.Excercises
 {
     public class Day1Part2 : ExcerciseBase
     {
+        public Day1Part2()
+        {
+            Day = 1;
+            Part = 2;
+        }
+
         public override void Run()
         {
 
