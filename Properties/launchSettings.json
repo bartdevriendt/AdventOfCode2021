@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "AdventOfCode2021": {
+      "commandName": "Project",
+      "commandLineArgs": "4 2",
+      "workingDirectory": "E:\\Projecten\\AdventOfCode\\AdventOfCode2021"
+    }
+  }
+}
