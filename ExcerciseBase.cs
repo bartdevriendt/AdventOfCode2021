@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Complex;
 
 namespace AdventOfCode2021
 {
@@ -27,6 +29,18 @@ namespace AdventOfCode2021
             }
             
             
+        }
+
+        protected void PrintMatrix<T>(Matrix<T> matrix)
+            where T: struct, IFormattable, IEquatable<T>
+        {
+
+            Console.WriteLine(matrix);
+            
+            //for (int x = 0; x < matrix.ColumnCount; x++)
+            //{
+
+            //}
         }
 
         public virtual void Run()
