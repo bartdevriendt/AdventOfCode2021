@@ -12,9 +12,10 @@ Dictionary<int, Dictionary<int, ExcerciseBase>> LoadExcercies()
 
     Dictionary<int, Dictionary<int, ExcerciseBase>> excercises = new ();
     
-    var types = Assembly.GetAssembly(typeof(ExcerciseBase))?.GetTypes().Where(t => t.BaseType == typeof(ExcerciseBase)).ToList();
+    var types = Assembly.GetAssembly(typeof(ExcerciseBase))?.GetTypes().Where(t => t.IsSubclassOf(typeof(ExcerciseBase))).ToList();
     foreach (Type t in types)
     {
+
         ExcerciseBase baseType = (ExcerciseBase)Activator.CreateInstance(t);
 
         if (!excercises.ContainsKey(baseType.Day))

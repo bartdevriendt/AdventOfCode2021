@@ -28,7 +28,22 @@ namespace AdventOfCode2021
                 action.Invoke(line);    
             }
             
-            
+            rdr.Close();
+        }
+
+        protected string ReadFullFile(string file)
+        {
+            if (!File.Exists(file))
+            {
+                throw new FileNotFoundException("File not found");
+            }
+
+            StreamReader rdr = new StreamReader(file);
+
+            string content = rdr.ReadToEnd().Trim();
+            rdr.Close();
+            return content;
+
         }
 
         protected void PrintMatrix<T>(Matrix<T> matrix)
