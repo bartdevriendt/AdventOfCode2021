@@ -46,32 +46,6 @@ namespace AdventOfCode2021.Excercises
 
         private double CalculateFishCount(int startTimer, int iterations)
         {
-            //List<int> fish = new List<int> { startTimer };
-            //int j = 0;
-            //while (j < iterations)
-            //{
-
-            //    List<int> newIteration = new List<int>();
-
-            //    foreach (int f in fish)
-            //    {
-            //        if (f == 0)
-            //        {
-            //            newIteration.Add(6);
-            //            newIteration.Add(8);
-            //        }
-            //        else
-            //        {
-            //            newIteration.Add(f - 1);
-            //        }
-            //    }
-
-            //    j++;
-            //    fish = newIteration;
-            //}
-
-            //return fish.Count;
-
             Dictionary<int, double> internalTimerState = GetStartDictionary();
             internalTimerState[startTimer] = 1;
 
