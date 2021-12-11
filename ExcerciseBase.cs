@@ -46,6 +46,27 @@ namespace AdventOfCode2021
 
         }
 
+        protected Matrix<double> ReadMatrix(string file)
+        {
+            string input = ReadFullFile(file);
+            string[] lines = input.Split("\r\n");
+            int rows = lines.Length;
+            int cols = lines[0].Trim().Length;
+
+            Matrix<double> m = Matrix<double>.Build.Sparse(rows, cols, -1);
+
+
+            for (int j = 0; j < rows; j++)
+            {
+                for (int k = 0; k < cols; k++)
+                {
+                    m[j, k] = Convert.ToInt32(lines[j][k].ToString());
+                }
+            }
+
+            return m;
+        }
+        
         protected void PrintMatrix<T>(Matrix<T> matrix)
             where T: struct, IFormattable, IEquatable<T>
         {
