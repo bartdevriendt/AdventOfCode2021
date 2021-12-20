@@ -53,7 +53,7 @@ namespace AdventOfCode2021
             int rows = lines.Length;
             int cols = lines[0].Trim().Length;
 
-            Matrix<double> m = Matrix<double>.Build.Sparse(rows, cols, -1);
+            Matrix<double> m = Matrix<double>.Build.Dense(rows, cols, -1);
 
 
             for (int j = 0; j < rows; j++)
