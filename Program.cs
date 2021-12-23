@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AdventOfCode2021;
+using AdventOfCode2021.Excercises;
 
 Dictionary<int, Dictionary<int, ExcerciseBase>> LoadExcercies()
 {

@@ -12,6 +12,8 @@ namespace AdventOfCode2021.Excercises
         
         private long[] playerWins = new long[2] { 0, 0 };
 
+        private Dictionary<int, int> oddsThrow = new();
+
         public Day21Part2()
         {
             Day = 21;
@@ -20,70 +22,71 @@ namespace AdventOfCode2021.Excercises
 
         public override void Run()
         {
-            var task = Task.Factory.StartNew(()=> NextPlayer(0, 0, 4, 8, 1));
-            task.Wait();
+            // number of times each combination of three throws happens
+            oddsThrow.Add(3, 1);
+            oddsThrow.Add(4, 3);
+            oddsThrow.Add(5, 6);
+            oddsThrow.Add(6, 7);
+            oddsThrow.Add(7, 6);
+            oddsThrow.Add(8, 3);
+            oddsThrow.Add(9, 1);
+
+            NextPlayer(0, 0, 6, 3, 1, 1);
             Console.WriteLine($"Player wins: {playerWins[0]} - {playerWins[1]}");
+
+            var answer = playerWins[0] > playerWins[1] ? playerWins[0] : playerWins[1];
+
+            Console.WriteLine($"Most wins: {answer}");
         }
 
         
 
-        protected async Task NextPlayer(int player1score, int player2score, int player1position, int player2position, int currentPlayer)
+        protected void NextPlayer(int player1score, int player2score, int player1position, int player2position, long occurences, int currentPlayer)
         {
 
-            List<Task<Task>> tasks = new List<Task<Task>>();
-
-            for (int i = 1; i <= 3; i++)
+            foreach (int step in oddsThrow.Keys)
             {
-                for (int j = 1; j <= 3; j++)
+                if (currentPlayer == 1)
                 {
-                    for (int k = 1; k <= 3; k++)
+                    int nextPos = MovePlayer(player1position, step);
+                    int score = player1score + nextPos;
+                    long probability = occurences * oddsThrow[step];
+                    if (score >= 21)
                     {
-                        int totalMove = i + j + k;
-                        if (currentPlayer == 1)
-                        {
-                            int nextPos = player1position + totalMove;
-                            while(nextPos > 10) nextPos -= 10;
-                            int nextScore = player1score + nextPos;
-                            if (nextScore >= EndScore)
-                            {
-                                playerWins[0]++;
-                            }
-                            else
-                            {
-                                var t = Task.Factory.StartNew(() => NextPlayer(nextScore, player2score, nextPos, player2position, 2));
-                                tasks.Add(t);
-                            }
-                            
-
-                        }
-                        else if (currentPlayer == 2)
-                        {
-                            int nextPos = player2position + totalMove;
-                            while (nextPos > 10) nextPos -= 10;
-                            int nextScore = player2score + nextPos;
-                            if (nextScore >= EndScore)
-                            {
-                                playerWins[1]++;
-                            }
-                            else
-                            {
-                                var t = Task.Factory.StartNew(() => NextPlayer(player1score, nextScore, player1position, nextPos, 1));
-                                tasks.Add(t);
-                            }
-
-
-                        }
+                        playerWins[0] += probability;
+                    }
+                    else
+                    {
+                        NextPlayer(score, player2score, nextPos, player2position, probability, 2);
                     }
                 }
-            }
+                else
+                {
+                    int nextPos = MovePlayer(player2position, step);
 
-            if (tasks.Count > 0)
-            {
-                Task.WaitAll(tasks.ToArray());
+                    int score = player2score + nextPos;
+                    long probability = occurences * oddsThrow[step];
+                    if (score >= 21)
+                    {
+                        playerWins[1] += probability;
+                    }
+                    else
+                    {
+                        NextPlayer(player1score, score, player1position, nextPos, probability, 1);
+                    }
+
+                }
             }
             
         }
 
+        private int MovePlayer(int position, int steps)
+        {
+            int result = position + steps;
+            while (result > 10) result -= 10;
+            return result;
+
+        }
         
         
     }
