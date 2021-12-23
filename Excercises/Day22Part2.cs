@@ -3,21 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace AdventOfCode2021.Excercises
 {
 
-    public class Cube
-    {
-        public int XMin { get; set; }
-        public int XMax { get; set; }
-        public int YMin { get; set; }
-
-
-    }
-
     internal class Day22Part2 : ExcerciseBase
     {
+
+        private List<(bool b, (int lo, int hi) x, (int lo, int hi) y, (int lo, int hi) z)> boxes =
+            new List<(bool b, (int lo, int hi) x, (int lo, int hi) y, (int lo, int hi) z)>();
+
         public Day22Part2()
         {
             Day = 22;
@@ -35,7 +31,9 @@ namespace AdventOfCode2021.Excercises
                 ProcessLine(line);
             });
 
-            //Console.WriteLine($"Number of cubes turned on: {cubes.Count}");
+            var result = boxes.Sum(b => BoxSize(b.x, b.y, b.z) * (b.b ? 1 : -1));
+
+            Console.WriteLine($"Number of boxes turned on: {result}");
         }
 
         private void ProcessLine(string line)
@@ -57,14 +55,40 @@ namespace AdventOfCode2021.Excercises
             int zFrom = Convert.ToInt32(zRange[0]);
             int zTo = Convert.ToInt32(zRange[1]);
 
-            //if (xFrom < xMin) xFrom = xMin;
-            //if (xTo > xMax) xTo = xMax;
-            //if (yFrom < yMin) yFrom = yMin;
-            //if (yTo > yMax) yTo = yMax;
-            //if (zFrom < zMin) zFrom = zMax;
-            //if (zTo > zMax) zTo = zMin;
-
+            (bool b, (int lo, int hi) x, (int lo, int hi) y, (int lo, int hi) z) newBox = (turnOn, (xFrom, xTo),
+                (yFrom, yTo), (zFrom, zTo));
             
+
+            boxes.AddRange(
+                boxes.Select(sub => Overlap(newBox, sub))
+                    .Where(o => o.x.lo <= o.x.hi
+                                && o.y.lo <= o.y.hi
+                                && o.z.lo <= o.z.hi)
+                    .ToList()
+                );
+
+            if (turnOn)
+            {
+                boxes.Add(newBox);
+            }
+
         }
+
+        private static long BoxSize(
+            (int lo, int hi) x,
+            (int lo, int hi) y,
+            (int lo, int hi) z) =>
+            (x.hi - x.lo + 1L)
+            * (y.hi - y.lo + 1)
+            * (z.hi - z.lo + 1);
+
+        private static (bool b, (int lo, int hi) x, (int lo, int hi) y, (int lo, int hi) z) Overlap(
+            (bool b, (int lo, int hi) x, (int lo, int hi) y, (int lo, int hi) z) b1,
+            (bool b, (int lo, int hi) x, (int lo, int hi) y, (int lo, int hi) z) b2) =>
+        (
+            !b2.b,
+            (lo: Math.Max(b1.x.lo, b2.x.lo), hi: Math.Min(b1.x.hi, b2.x.hi)),
+            (lo: Math.Max(b1.y.lo, b2.y.lo), hi: Math.Min(b1.y.hi, b2.y.hi)),
+            (lo: Math.Max(b1.z.lo, b2.z.lo), hi: Math.Min(b1.z.hi, b2.z.hi)));
     }
 }
